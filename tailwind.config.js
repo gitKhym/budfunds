@@ -7,14 +7,6 @@ module.exports = {
     fontFamily: {
       sans: ["Lexend"],
     },
-    colors: {
-      grey: {
-        800: "#1E1D20",
-        600: "#232227",
-        400: "#333033",
-        200: "#8B8B8B",
-      },
-    },
     extend: {
       fontFamily: {
         Lexend: ["Lexend", "sans-serif"],
@@ -29,7 +21,16 @@ module.exports = {
           light: "#ffffff",
           dark: "#000000",
         },
+        grey: {
+          800: "#1E1D20",
+          600: "#232227",
+          400: "#333033",
+          200: "#8B8B8B",
+        },
         primary: "#FF405D",
+        pink: {
+          500: "#E45593",
+        },
         secondary: "#caa7a2",
       },
       fontSize: {
