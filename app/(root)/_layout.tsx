@@ -1,10 +1,15 @@
-import { View, Text } from "react-native";
-const Home = () => {
-  <View className="bg-black">
-    <Text className="text-white">
-      Home
-    </Text>
-  </View>
+import { Stack } from "expo-router";
 
+const Layout = () => {
+  return (
+    <Stack screenOptions={{
+      contentStyle: {
+        backgroundColor: "#1e1d20"
+      }
+    }}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
+  );
 }
-export default Home;
+
+export default Layout;
