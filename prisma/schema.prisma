@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  username  String   @unique
+  email     String   @unique
+  password  String
+  fname     String?
+  lname     String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  friends Friend[]
+}
+
+model Friend {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Participant {
+  id String @id @default(uuid())
+
+  hasPaid    Boolean @default(false)
+  amountPaid Int
+
+  splitGroup   SplitGroup @relation(fields: [splitGroupId], references: [id])
+  splitGroupId String
+
+  // Individual splits User is in
+  splitsAsPayer    Split[] @relation("PayerPayments")
+  splitsAsReceiver Split[] @relation("ReceiverPayments")
+}
+
+model SplitGroup {
+  id   String @id @default(uuid())
+  name String
+
+  splits       Split[]
+  participants Participant[]
+}
+
+model Split {
+  id         String @id @default(uuid())
+  amountOwed Int
+
+  splitGroup   SplitGroup @relation(fields: [splitGroupId], references: [id])
+  splitGroupId String
+
+  payer   Participant @relation("PayerPayments", fields: [payerId], references: [id])
+  payerId String
+
+  receiver   Participant @relation("ReceiverPayments", fields: [receiverId], references: [id])
+  receiverId String
+}
