@@ -4,20 +4,26 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 
+declare interface IconProps {
+  size: number;
+  fill?: string;
+}
+
 declare interface TextFieldProps {
   value: string;
   onChangeText: (string) => void;
   label: string;
-  icon: ImageSourcePropType;
+  Icon: any;
   placeholder: string;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: "none" | "sentences";
+  error?: string;
 }
 
 declare interface CustomButtonProps {
   label?: string;
-  icon?: ImageSourcePropType;
+  Icon?: any;
   additionalStyle?: string;
-  onPress: () => void;
+  onPress: () => void | void;
 }
