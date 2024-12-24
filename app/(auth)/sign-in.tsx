@@ -48,7 +48,7 @@ const SignIn = () => {
         className="flex w-full items-start pb-6"
       >
         <View className="rounded-full bg-grey-400 p-3.5">
-          <Image source={icons.back_arrow} resizeMode="contain" style={{ height: 24, width: 24 }} />
+          <icons.BackArrow size={32} />
         </View>
       </TouchableOpacity>
 
@@ -62,7 +62,7 @@ const SignIn = () => {
               value={form.email}
               onChangeText={(value) => setForm({ ...form, email: value })}
               label="Email"
-              icon={icons.mail}
+              Icon={icons.Mail}
               placeholder="Your email"
               keyboardType="email-address"
               autoCapitalize="none"
@@ -71,7 +71,7 @@ const SignIn = () => {
               value={form.password}
               onChangeText={(value) => setForm({ ...form, password: value })}
               label="Password"
-              icon={icons.lock}
+              Icon={icons.Lock}
               placeholder="Your password"
               secureTextEntry={true}
               autoCapitalize="none"
@@ -80,7 +80,7 @@ const SignIn = () => {
           <HeroButton label="Sign In" onPress={onSignInPress} additionalStyle="mt-4" />
           <Separator label="Or" />
           <View className="flex-row items-center justify-center gap-4">
-            <CustomButton label="Sign in with Google" icon={icons.google} onPress={() => {
+            <CustomButton label="Sign in with Google" Icon={icons.google} onPress={() => {
               // TODO: OAuth for Google
             }} />
           </View>
