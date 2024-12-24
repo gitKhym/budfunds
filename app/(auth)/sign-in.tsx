@@ -1,21 +1,43 @@
-import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
-import { useState } from "react";
+import { Text, View, Image, TouchableOpacity } from "react-native";
+import { useState, useCallback } from "react";
 import { icons } from "@/constants";
-import { router } from "expo-router";
 import TextField from "@/components/onboarding/TextField";
 import Separator from "@/components/onboarding/Separator";
 import HeroButton from "@/components/onboarding/HeroButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "@/components/onboarding/CustomButton";
+import { useSignIn } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
 
 const SignIn = () => {
+  const { signIn, setActive, isLoaded } = useSignIn()
+  const router = useRouter()
 
   const [form, setForm] = useState({
-    username: "",
     email: "",
     password: "",
-    confirmPassword: ""
   })
+
+  const onSignInPress = useCallback(async () => {
+    if (!isLoaded) return
+
+    // Start the sign-in process using the email and password provided
+    try {
+      const signInAttempt = await signIn.create({
+        identifier: form.email,
+        password: form.password,
+      })
+
+      if (signInAttempt.status === 'complete') {
+        await setActive({ session: signInAttempt.createdSessionId })
+        //router.replace('/(root)/(tabs)/home')
+      } else {
+        console.error(JSON.stringify(signInAttempt, null, 2))
+      }
+    } catch (err) {
+      console.error(JSON.stringify(err, null, 2))
+    }
+  }, [isLoaded, form.email, form.password])
 
   return (
     <SafeAreaView className="flex-1 bg-grey-600 px-8 py-6">
@@ -55,9 +77,7 @@ const SignIn = () => {
               autoCapitalize="none"
             />
           </View>
-          <HeroButton label="Sign In" onPress={() => {
-            // TODO: On Press to sign in button
-          }} additionalStyle="mt-4" />
+          <HeroButton label="Sign In" onPress={onSignInPress} additionalStyle="mt-4" />
           <Separator label="Or" />
           <View className="flex-row items-center justify-center gap-4">
             <CustomButton label="Sign in with Google" icon={icons.google} onPress={() => {
