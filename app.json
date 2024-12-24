@@ -16,15 +16,23 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#232227"
       },
+      "permissions": [
+        "INTERNET"
+      ],
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://budfunds.dev/"
+        }
+      ],
       [
         "expo-splash-screen",
         {
