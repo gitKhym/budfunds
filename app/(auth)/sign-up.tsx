@@ -32,7 +32,6 @@ const SignUp = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    hashedPassword: "",
   })
 
   const onSignUpPress = async () => {
@@ -40,15 +39,12 @@ const SignUp = () => {
 
     setVerification({ ...verification, error: "" });
 
-
     try {
       // Hash password and input it in on Clerk's signUp
       const digestedPassword = await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
         form.password
       );
-
-      setForm({ ...form, hashedPassword: digestedPassword })
 
       await signUp.create({
         username: form.username,

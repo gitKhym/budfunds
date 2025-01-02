@@ -4,7 +4,7 @@ import { Redirect } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Linking from 'expo-linking'
-import { fetchAPI } from '@/lib/fetch'
+import Debug from './debug'
 const Home = () => {
 
   const { user } = useUser()
@@ -19,39 +19,12 @@ const Home = () => {
     }
   }
 
-
   return (
     <SafeAreaView className="bg-grey-600">
       <SignedIn>
         <Text className='text-white'>Hello {user?.emailAddresses[0].emailAddress}</Text>
         <CustomButton label="Sign Out" onPress={handleSignOut} additionalStyle='flex-row items-center' />
-        <CustomButton onPress={async () => {
-
-          const uuid = await fetchAPI('/(api)/users/', {
-            method: "GET",
-          })
-          console.log(uuid)
-        }}
-          label='Log Users'
-        />
-        <CustomButton onPress={async () => {
-
-          const user = await fetchAPI('/(api)/users/Kayyy2/', {
-            method: "GET",
-          })
-          console.log(user)
-        }}
-          label='Log Specific user'
-        />
-        <CustomButton onPress={async () => {
-          const uuid = await fetchAPI('/(api)/friends?', {
-            method: "POST",
-          })
-          console.log(uuid)
-        }}
-          label='Log Specific user'
-        />
-
+        <Debug />
       </SignedIn>
       <SignedOut>
         <Redirect href="/(auth)/welcome" />

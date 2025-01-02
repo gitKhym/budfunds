@@ -1,16 +1,13 @@
-import { ImageSourcePropType, View, Text, FlatList, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, Image, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { icons } from "@/constants";
-import { Link } from "expo-router";
+import { Link, Redirect } from "expo-router";
+import { fetchAPI } from "@/lib/fetch";
+import { useUser } from "@clerk/clerk-expo";
+import { useEffect, useState } from "react";
+import { Friend } from "@/types/type";
+import { useIsFocused } from "@react-navigation/native";
+import { useQuery } from "react-query"
 
-interface FriendCardProps {
-  username: string
-  amountOwed: number,
-  activity: string,
-  date: string
-  avatar: ImageSourcePropType,
-  isOwed: boolean
-}
 
 // TODO
 enum DebtStatus {
@@ -21,6 +18,12 @@ enum DebtStatus {
 
 
 const Friends = () => {
+  const { user } = useUser()
+
+
+  if (!user) {
+    return <Redirect href="/(auth)/sign-in" />
+  }
 
   const avatar = require('@/assets/images/profilePic1.png');
   const avatar2 = require('@/assets/images/profilePic2.png');
@@ -35,45 +38,62 @@ const Friends = () => {
     { username: "Denzel", amountOwed: 3234, activity: "Has paid $25.55", date: "1 Week Ago", isOwed: false, avatar: avatar3 },
     { username: "Denzel", amountOwed: 3234, activity: "Has paid $25.55", date: "1 Week Ago", isOwed: false, avatar: avatar3 },
     { username: "Denzel", amountOwed: 3234, activity: "Has paid $25.55", date: "1 Week Ago", isOwed: false, avatar: avatar3 },
-
   ];
+
+  const [friends, setFriends] = useState<Friend[]>([]);
+
+  const isFocused = useIsFocused();
+
+  const { data, isLoading, error } = useQuery(
+    "friends",
+    async () => {
+      try {
+        const res = await fetch(`/(api)/users/${user.username}/`);
+        if (!res.ok) {
+          throw new Error(`Error: ${res.statusText}`);
+        }
+        return res.json()
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    {
+      onError: (error) => {
+        console.error(error);
+      }
+    }
+  );
+
+  console.log(data)
+
+
   return (
     <SafeAreaView className="bg-grey-600">
       <View className="flex flex-col items-center justify-between py-3">
         <Text className="font-Koulen text-2xl text-white">Friends</Text>
       </View>
-      <ScrollView className="bg-grey-400">
-        <FlatList
-          data={friendsData}
-          keyExtractor={(item, index) => `${item.username}-${index}`}
-          renderItem={({ item }) => (
-            <FriendCard
-              username={item.username}
-              amountOwed={item.amountOwed}
-              activity={item.activity}
-              date={item.date}
-              isOwed={item.isOwed}
-              avatar={item.avatar}
-            />
-          )}
-
-          ItemSeparatorComponent={() => <View className="h-4" />}
-          className="p-5"
-        />
-      </ScrollView>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.username}
+        renderItem={({ item }) => (
+          <FriendCard user={item} />
+        )}
+        ListEmptyComponent={
+          isLoading ? (
+            <ActivityIndicator animating={true} />
+          ) : (
+            <Text className="text-white">No friends found</Text>
+          )
+        }
+        ItemSeparatorComponent={() => <View className="h-4" />}
+        className="p-5"
+      />
     </SafeAreaView>
-
   )
 }
 
-const FriendCard = ({
-  username,
-  amountOwed,
-  activity,
-  date,
-  avatar,
-  isOwed,
-}: FriendCardProps) => {
+const FriendCard = ({ user }: { user: Friend }) => {
+  const { username, date, activity, avatar, isOwed, amountOwed } = user
   const oweStatus = `${isOwed ? "You owe" : "Owes you"}`;
   const formattedAmount = `$${(amountOwed / 100).toFixed(2)}`;
 
@@ -97,10 +117,9 @@ const FriendCard = ({
         </View>
         <View className="relative flex flex-col items-end">
           <Text className="font-Lexend text-sm text-white opacity-50">{oweStatus}</Text>
-          <Text className={`${isOwed ? "text-bf-red" : "text-bf-green"} font-Lexend text-sm`}>{formattedAmount}</Text>
+          <Text className={`${isOwed ? "text-bf-red" : "text-bf-green"} text-s font-Lexendm`}>{formattedAmount}</Text>
         </View>
       </View>
-
     </Link>
   )
 }

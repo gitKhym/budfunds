@@ -25,7 +25,7 @@ const OAuth = () => {
 
   return (
     <View className="flex-row items-center justify-center gap-4">
-      <CustomButton label="Sign up with Google" Icon={icons.google} onPress={onGooglePress} />
+      <CustomButton label="Sign up with Google" image={icons.google} onPress={onGooglePress} />
     </View>
   )
 }

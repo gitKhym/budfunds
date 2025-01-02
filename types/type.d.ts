@@ -24,6 +24,18 @@ declare interface TextFieldProps {
 declare interface CustomButtonProps {
   label?: string;
   Icon?: any;
+  image?: ImageSourcePropType;
   additionalStyle?: string;
   onPress: () => void | void;
+}
+
+declare interface Friend extends User {}
+
+declare interface User {
+  username: string;
+  amountOwed: number;
+  activity?: string;
+  date?: string;
+  isOwed: boolean;
+  avatar: string;
 }

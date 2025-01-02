@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "@/components/onboarding/CustomButton";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
+import * as Crypto from 'expo-crypto';
 
 const SignIn = () => {
   const { signIn, setActive, isLoaded } = useSignIn()
@@ -16,6 +17,7 @@ const SignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
+    hashedPassword: ""
   })
 
   const onSignInPress = useCallback(async () => {
@@ -23,14 +25,22 @@ const SignIn = () => {
 
     // Start the sign-in process using the email and password provided
     try {
+
+      const digestedPassword = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        form.password
+      )
+
+      setForm({ ...form, hashedPassword: digestedPassword })
+
       const signInAttempt = await signIn.create({
         identifier: form.email,
-        password: form.password,
+        password: digestedPassword,
       })
 
       if (signInAttempt.status === 'complete') {
         await setActive({ session: signInAttempt.createdSessionId })
-        //router.replace('/(root)/(tabs)/home')
+        router.replace('/(root)/(tabs)/home')
       } else {
         console.error(JSON.stringify(signInAttempt, null, 2))
       }
@@ -52,49 +62,47 @@ const SignIn = () => {
         </View>
       </TouchableOpacity>
 
-      <View className="flex-1 justify-between">
+      <View className="flex-1">
         <View>
-          <View>
-            <Text className="font-Koulen text-2xl text-white">
-              Sign in to <Text className="text-primary">BUDFUNDS</Text>
-            </Text>
-            <TextField
-              value={form.email}
-              onChangeText={(value) => setForm({ ...form, email: value })}
-              label="Email"
-              Icon={icons.Mail}
-              placeholder="Your email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            <TextField
-              value={form.password}
-              onChangeText={(value) => setForm({ ...form, password: value })}
-              label="Password"
-              Icon={icons.Lock}
-              placeholder="Your password"
-              secureTextEntry={true}
-              autoCapitalize="none"
-            />
-          </View>
-          <HeroButton label="Sign In" onPress={onSignInPress} additionalStyle="mt-4" />
-          <Separator label="Or" />
-          <View className="flex-row items-center justify-center gap-4">
-            <CustomButton label="Sign in with Google" Icon={icons.google} onPress={() => {
-              // TODO: OAuth for Google
-            }} />
-          </View>
+          <Text className="font-Koulen text-2xl text-white">
+            Sign in to <Text className="text-primary">BUDFUNDS</Text>
+          </Text>
+          <TextField
+            value={form.email}
+            onChangeText={(value) => setForm({ ...form, email: value })}
+            label="Email"
+            Icon={() => <icons.Mail size={24} />}
+            placeholder="Your email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <TextField
+            value={form.password}
+            onChangeText={(value) => setForm({ ...form, password: value })}
+            label="Password"
+            Icon={() => <icons.Lock size={24} />}
+            placeholder="Your password"
+            secureTextEntry={true}
+            autoCapitalize="none"
+          />
         </View>
-        <View className="flex-row items-center justify-center">
-          <Text className="font-Lexend text-white">Don't have an account yet?</Text>
-          <TouchableOpacity
-            onPress={() => {
-              router.replace("/(auth)/sign-up");
-            }}
-          >
-            <Text className="text-md ml-1 font-Lexend text-primary underline">Sign Up</Text>
-          </TouchableOpacity>
+        <HeroButton label="Sign In" onPress={onSignInPress} additionalStyle="mt-6" />
+        <Separator label="Or" />
+        <View className="flex-row items-center justify-center gap-4">
+          <CustomButton label="Sign in with Google" image={icons.google} onPress={() => {
+            // TODO: OAuth for Google
+          }} />
         </View>
+      </View>
+      <View className="flex-row items-center justify-center">
+        <Text className="font-Lexend text-white">Don't have an account yet?</Text>
+        <TouchableOpacity
+          onPress={() => {
+            router.replace("/(auth)/sign-up");
+          }}
+        >
+          <Text className="text-md ml-1 font-Lexend text-primary underline">Sign Up</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView >
   );

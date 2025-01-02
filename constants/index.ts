@@ -1,3 +1,4 @@
+import google from "@/assets/icons/google.png";
 import Home from "@/assets/icons/HomeIcon";
 import Person from "@/assets/icons/Person";
 import Mail from "@/assets/icons/Mail";
@@ -18,4 +19,5 @@ export const icons = {
   BackArrow,
   Group,
   Event,
+  google,
 };

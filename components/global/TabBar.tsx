@@ -53,13 +53,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
             target: route.key,
           });
         };
-
-
-
-
         const IconComponent = iconList[index] || DefaultIcon;
 
-        console.log(`Icon for route ${route.name}:`, IconComponent);
         return (
           <PlatformPressable
             key={route.name}
