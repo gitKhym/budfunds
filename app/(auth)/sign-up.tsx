@@ -34,6 +34,8 @@ const SignUp = () => {
     confirmPassword: "",
   })
 
+  const [hashedPassword, setHashedPassword] = useState("")
+
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
@@ -46,10 +48,12 @@ const SignUp = () => {
         form.password
       );
 
+      setHashedPassword(digestedPassword)
+
       await signUp.create({
         username: form.username,
         emailAddress: form.email,
-        password: digestedPassword,
+        password: hashedPassword,
       });
 
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
@@ -79,7 +83,7 @@ const SignUp = () => {
           body: JSON.stringify({
             username: form.username,
             email: form.email,
-            password: form.hashedPassword,
+            password: hashedPassword,
             clerkId: signUpAttempt.createdUserId
           })
         })
