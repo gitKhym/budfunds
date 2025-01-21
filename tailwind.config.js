@@ -13,6 +13,9 @@ module.exports = {
         Quicksand: ["Quicksand", "sans-serif"],
         Koulen: ["Koulen", "sans-serif"],
       },
+      dropShadow: {
+        light: "0 35px 35px rgba(0,0,0,0.25)",
+      },
       borderRadius: {
         square: "0.6rem",
       },
@@ -21,11 +24,21 @@ module.exports = {
           light: "#ffffff",
           dark: "#000000",
         },
+        "darken-grey": {
+          600: "rgba(30,29,32,0.80)",
+        },
+        darken: {
+          25: "rgba(0,0,0,0.25)",
+          50: "rgba(0,0,0,0.5)",
+          75: "rgba(0,0,0,0.75)",
+        },
         grey: {
           800: "#1E1D20",
           600: "#232227",
+          550: "#27262B",
           400: "#333033",
           200: "#8B8B8B",
+          100: "#D3D3D3",
         },
         primary: "#FF405D",
         "bf-green": "#63D685",
@@ -37,6 +50,7 @@ module.exports = {
         secondary: "#caa7a2",
       },
       fontSize: {
+        tiny: "0.85rem",
         sm: "1rem",
         "sm-half": "1.25rem",
         lg: "1.5rem",
