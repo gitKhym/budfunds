@@ -24,7 +24,9 @@ Fetches a list of users
 ### GET /api/users/{userId}
 Fetches a specific user based on userId
 
-### GET /api/users/{userId}/splits/
-Fetches a users splits
+### GET /api/users/{userId}/split
+Fetches a user's splits
 
+### GET /api/users/{userId}/splits/groups
+Fetches a user's split groups
 
