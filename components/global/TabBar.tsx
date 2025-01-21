@@ -3,6 +3,7 @@ import { View, Platform } from 'react-native';
 import { useLinkBuilder } from '@react-navigation/native';
 import { Text, PlatformPressable } from '@react-navigation/elements';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const BarTab = ({ Icon, label, focused }: { Icon: any, label?: string | undefined | null, focused: boolean }) => {
   return (
@@ -19,6 +20,16 @@ const BarTab = ({ Icon, label, focused }: { Icon: any, label?: string | undefine
   )
 }
 
+const AddButton = ({ Icon, }: { Icon: any }) => {
+  return (
+    <View className="h-24 w-24 flex-col items-center justify-center">
+      <LinearGradient colors={["#FF405D", "#E45593"]} style={{ borderRadius: 10 }} end={[1, 0.5]}>
+        <Icon />
+      </LinearGradient>
+    </View>
+  )
+}
+
 const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const { buildHref } = useLinkBuilder();
 
@@ -28,9 +39,8 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
     <Text style={{ color: '#ffffff', fontSize: 16 }}>?</Text>
   );
 
-
   return (
-    <View className='flex flex-row items-center justify-between bg-grey-600'>
+    <View className='absolute bottom-0 left-0 flex w-screen flex-row  items-center justify-between bg-grey-600'>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;
@@ -54,6 +64,23 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
           });
         };
         const IconComponent = iconList[index] || DefaultIcon;
+
+        if (index == 2) {
+          return (
+
+            <PlatformPressable
+              key={route.name}
+              href={buildHref(route.name, route.params)}
+              testID={options.tabBarButtonTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+            >
+              <AddButton
+                Icon={() => <IconComponent size={48} fill="#ffffff" />}
+              />
+            </PlatformPressable>
+          )
+        }
 
         return (
           <PlatformPressable
