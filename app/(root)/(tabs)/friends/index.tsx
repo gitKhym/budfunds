@@ -1,3 +1,4 @@
+
 import { View, Text, FlatList, Image, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Redirect } from "expo-router";
@@ -63,10 +64,6 @@ const Friends = () => {
       }
     }
   );
-
-  console.log(data)
-
-
   return (
     <SafeAreaView className="bg-grey-600">
       <View className="flex flex-col items-center justify-between py-3">

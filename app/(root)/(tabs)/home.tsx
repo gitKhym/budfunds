@@ -1,10 +1,13 @@
 import CustomButton from '@/components/onboarding/CustomButton'
 import { SignedIn, SignedOut, useUser, useClerk } from '@clerk/clerk-expo'
-import { Redirect } from 'expo-router'
+import { Redirect, useLocalSearchParams } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as Linking from 'expo-linking'
-import Debug from './debug'
+import { fetchAPI } from '@/lib/fetch'
+import { fetchIdFromUsername } from '@/lib/fetchId'
+import { fetchSplits } from '@/api'
+import { SplitInvolvement } from '@/enums'
 const Home = () => {
 
   const { user } = useUser()
@@ -24,7 +27,6 @@ const Home = () => {
       <SignedIn>
         <Text className='text-white'>Hello {user?.emailAddresses[0].emailAddress}</Text>
         <CustomButton label="Sign Out" onPress={handleSignOut} additionalStyle='flex-row items-center' />
-        <Debug />
       </SignedIn>
       <SignedOut>
         <Redirect href="/(auth)/welcome" />
