@@ -1,19 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 
-export async function GET(
-  req: Request,
-  { userId, splitGroupId }: Record<string, string>,
-) {
+export async function POST(req: Request) {
   const prisma = new PrismaClient();
 
-  const data = await prisma.participantsOnSplits.findMany({
-    where: {
-      participant: {
-        userId,
-      },
+  const { splitGroupName } = await req.json();
+
+  const data = await prisma.splitGroup.create({
+    data: {
+      splitGroupName: splitGroupName,
     },
   });
-
   try {
     return new Response(JSON.stringify({ data }), {
       status: 200,
