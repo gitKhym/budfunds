@@ -13,9 +13,18 @@ export async function GET(req: Request, { userId }: Record<string, string>) {
       },
       include: {
         members: {
-          where: {
-            NOT: {
-              userId,
+          select: {
+            user: {
+              select: {
+                id: true,
+                profile: {
+                  select: {
+                    fname: true,
+                    lname: true,
+                    avatar: true,
+                  },
+                },
+              },
             },
           },
         },

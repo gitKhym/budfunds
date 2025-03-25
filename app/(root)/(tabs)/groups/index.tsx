@@ -23,6 +23,7 @@ const SplitGroups = () => {
     queryFn: () => fetchSplitGroups(userId),
     queryKey: [userId]
   });
+  console.log(splitGroups)
 
   return (
     <SafeAreaView className="flex-1 bg-grey-600">

@@ -32,15 +32,12 @@ declare interface IconProps {
 }
 
 declare interface TextFieldProps {
-  value: string;
-  onChangeText: (string) => void;
+  value?: string;
   label: string;
   Icon: any;
   placeholder: string;
-  secureTextEntry?: boolean;
-  keyboardType?: KeyboardTypeOptions;
-  autoCapitalize?: "none" | "sentences";
   error?: string;
+  textInputProps?: TextInputProps;
 }
 
 declare interface CustomButtonProps {
@@ -63,7 +60,31 @@ declare interface User {
   avatar: string;
 }
 
+declare interface UserProfile {
+  userId: string;
+  fname: string;
+  lname: string;
+  avatar: string;
+}
+
+declare interface Participant {
+  profile: UserProfile;
+  amountOwed: number;
+  percentageOwed: float;
+}
+
 declare interface Friend extends User {}
+
+declare interface SplitDetails {
+  splitName: string;
+  amountToSplit: number | null;
+  description: string;
+}
+
+declare interface GroupDetails {
+  id: string;
+  groupName: string;
+}
 
 declare interface SplitGroup {
   createdAt: string;

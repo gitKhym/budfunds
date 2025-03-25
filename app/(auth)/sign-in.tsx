@@ -73,8 +73,10 @@ const SignIn = () => {
             label="Email"
             Icon={() => <icons.Mail size={24} />}
             placeholder="Your email"
-            keyboardType="email-address"
-            autoCapitalize="none"
+            textInputProps={{
+              autoCapitalize: "none",
+              keyboardType: "email-address"
+            }}
           />
           <TextField
             value={form.password}
@@ -82,8 +84,10 @@ const SignIn = () => {
             label="Password"
             Icon={() => <icons.Lock size={24} />}
             placeholder="Your password"
-            secureTextEntry={true}
-            autoCapitalize="none"
+            textInputProps={{
+              autoCapitalize: "none",
+              secureTextEntry: true
+            }}
           />
         </View>
         <HeroButton label="Sign In" onPress={onSignInPress} additionalStyle="mt-6" />

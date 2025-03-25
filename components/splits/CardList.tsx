@@ -14,7 +14,9 @@ const CardList = <T,>({ data, refreshing, onRefresh, renderItem }: CardListProps
       renderItem={({ item }) => renderItem(item)}
       keyExtractor={(item) => (item as any).id}
       ItemSeparatorComponent={() => <View className="h-3" />}
+      className="p-4"
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      contentContainerStyle={{ flexGrow: 1 }}
     />
   )
 }

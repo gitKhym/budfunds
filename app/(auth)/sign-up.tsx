@@ -130,7 +130,9 @@ const SignUp = () => {
               label="Username"
               Icon={() => <icons.Person size={24} />}
               placeholder="Your username"
-              autoCapitalize="none"
+              textInputProps={{
+                autoCapitalize: "none"
+              }}
             />
             <TextField
               value={form.email}
@@ -138,8 +140,10 @@ const SignUp = () => {
               label="Email"
               Icon={() => <icons.Mail size={24} />}
               placeholder="Your email"
-              keyboardType="email-address"
-              autoCapitalize="none"
+              textInputProps={{
+                autoCapitalize: "none",
+                keyboardType: "email-address"
+              }}
             />
             <TextField
               value={form.password}
@@ -147,8 +151,10 @@ const SignUp = () => {
               label="Password"
               Icon={() => <icons.Lock size={24} />}
               placeholder="Your password"
-              secureTextEntry={true}
-              autoCapitalize="none"
+              textInputProps={{
+                autoCapitalize: "none",
+                secureTextEntry: true
+              }}
             />
             <TextField
               value={form.confirmPassword}
@@ -156,8 +162,10 @@ const SignUp = () => {
               label="Confirm Password"
               Icon={() => <icons.Lock size={24} />}
               placeholder="Confirm your password"
-              secureTextEntry={true}
-              autoCapitalize="none"
+              textInputProps={{
+                autoCapitalize: "none",
+                secureTextEntry: true
+              }}
             />
           </View>
           <HeroButton label="Sign Up" onPress={onSignUpPress} additionalStyle="mt-4" />

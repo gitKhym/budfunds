@@ -40,7 +40,7 @@ const TabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   );
 
   return (
-    <View className='flex w-screen flex-row  items-center justify-between bg-grey-600'>
+    <View className=' flex w-screen flex-row  items-center justify-between bg-grey-600'>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const isFocused = state.index === index;

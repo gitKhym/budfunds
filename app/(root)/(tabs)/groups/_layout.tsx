@@ -7,10 +7,21 @@ const Layout = () => {
         contentStyle: {
           backgroundColor: "#1e1d20"
         },
-        animation: "slide_from_bottom",
+        animation: "fade_from_bottom",
       }}>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="[splitGroupId]" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="[splitGroupId]"
+        options={{
+          headerShown: false,
+        }}
+      />
+
     </Stack>
   );
 }

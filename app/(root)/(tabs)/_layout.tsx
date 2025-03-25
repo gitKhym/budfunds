@@ -20,10 +20,13 @@ const Layout = () => {
             navigation={navigation}
             insets={insets} />
           }
-
-          screenOptions={{
-            animation: "shift"
-          }}
+          screenOptions={({ route }) => ({
+            animation: "shift",
+            sceneStyle: { backgroundColor: "#1e1d20" },
+            tabBarStyle: {
+              display: 'none'
+            },
+          })}
         >
           <Tabs.Screen
             name="home"

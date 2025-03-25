@@ -6,7 +6,7 @@ export default function NotFoundScreen() {
     <>
       <View >
         <Text >Yo</Text>
-        <Text >Go to home screen!</Text>
+        <Text>Go to home screen!</Text>
       </View>
     </>
   );

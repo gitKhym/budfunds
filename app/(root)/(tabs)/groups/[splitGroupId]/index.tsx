@@ -1,18 +1,25 @@
 import { fetchSplits } from "@/api";
-import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "react-query";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, useState } from "react";
 import { View, Text, ActivityIndicator, ImageBackground } from "react-native";
 import SplitCard from "@/components/splits/SplitCard";
 import { SplitInvolvement } from "@/enums";
-import { Split } from "@/types/type";
+import { Split, UserProfile } from "@/types/type";
 import CardList from "@/components/splits/CardList";
 import DateAndCount from "@/components/splits/DateAndCount";
 import CustomButton from "@/components/onboarding/CustomButton";
 import { icons } from "@/constants";
-import { useRoute } from "@react-navigation/native";
+import { useGroupDetails } from "@/context/splitContext/groupDetailsProvider";
+import { useGroupParticipants } from "@/context/splitContext/groupParticipantsProvider";
+
 const Splits = () => {
+  const userId = "c334725b-584c-4691-97b9-47242c2cdce7"
+
+  const { setGroupParticipants } = useGroupParticipants()
+  const { setGroupDetails } = useGroupDetails()
 
   const [refreshing, setRefreshing] = useState(false)
   const onRefresh = useCallback(() => {
@@ -23,18 +30,35 @@ const Splits = () => {
     }
   }, []);
 
-  const userId = "c334725b-584c-4691-97b9-47242c2cdce7"
 
-  const { splitGroupId, groupData } = useLocalSearchParams<{ splitGroupId: string, groupData: string }>();
+  const { groupData } = useLocalSearchParams<{ splitGroupId: string, groupData: string }>();
+
   const { id, splitGroupName, members, createdAt } = JSON.parse(groupData)
 
   const { data: splits, isLoading, isFetched, refetch } = useQuery({
-    queryFn: () => fetchSplits(userId, splitGroupId, SplitInvolvement.AUTHORING),
-    queryKey: [userId, splitGroupId],
+    queryFn: () => fetchSplits(userId, id, SplitInvolvement.AUTHORING),
+    queryKey: [userId, id],
   });
 
-  const image = { uri: 'https://images.pexels.com/photos/402028/pexels-photo-402028.jpeg' }
+  useEffect(() => {
+    const profiles: UserProfile[] = members.map((member: any) => ({
+      ...member.user.profile,
+      userId: member.user.id
+    }));
 
+    setGroupParticipants(
+      profiles.map(profile => ({
+        profile,
+        amountOwed: 0,
+        percentageOwed: 0.0
+      }))
+    );
+
+    setGroupDetails({ id, groupName: splitGroupName })
+
+  }, [splitGroupName])
+
+  const image = { uri: 'https://images.pexels.com/photos/402028/pexels-photo-402028.jpeg' }
 
   const router = useRouter()
   return (
@@ -47,9 +71,17 @@ const Splits = () => {
           <Text className="font-Koulen text-2xl text-white">{splitGroupName}</Text>
           <DateAndCount date={createdAt} list={members} />
           <View className="mt-5 h-12 flex-row items-center gap-2">
-            <CustomButton additionalStyle="bg-primary" label="Make a split" onPress={() => {
-              router.replace('./create', { relativeToDirectory: true })
-            }} />
+            <CustomButton
+              additionalStyle="bg-primary"
+              label="Make a split"
+              onPress={() => {
+                router.push({
+                  pathname: './create/createSplitDetails',
+                  params: { groupData }
+                },
+                  { relativeToDirectory: true })
+              }}
+            />
             <CustomButton label="View activities" onPress={() => { }} />
             <CustomButton Icon={() => <icons.Person size={25} />} onPress={() => { }} />
           </View>
@@ -85,13 +117,20 @@ const Splits = () => {
           />
         </View>
       </View>
-      <View className="h-full bg-grey-400 p-3">
+      <View className="flex-1 bg-grey-400">
         {isLoading ?
-          <ActivityIndicator />
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator
+              color="#ff305d"
+              size={50}
+            />
+          </View>
           :
           <CardList
             data={splits.data}
-            renderItem={(item: Split) => <SplitCard item={item} involvement={SplitInvolvement.AUTHORING} />}
+            renderItem={(item: Split) =>
+              <SplitCard item={item} involvement={SplitInvolvement.AUTHORING} />
+            }
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
